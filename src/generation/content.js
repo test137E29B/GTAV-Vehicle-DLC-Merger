@@ -1,7 +1,7 @@
 const formatXml = require('xml-formatter');
 
 module.exports = {
-  generateContentFile: function (dlcName, audioGameDataNames, audioSoundDataNames, hasMods, hasSfx, hasTranslations) {
+  generateContentFile: function (dlcName, audioGameDataNames, audioSoundDataNames, hasMods, hasSfx, hasTranslations, vehicleLayoutFileNames) {
     return formatXml(`<?xml version="1.0" encoding="UTF-8"?>
     <CDataFileMgr__ContentsOfDataFileXml>
       <disabledFiles />
@@ -86,6 +86,15 @@ module.exports = {
         <disabled value="true" />
         <persistent value="false" />
       </Item>` : ''}
+
+        <!-- Vehicle Layout Files -->
+        ${vehicleLayoutFileNames.map(vehicleLayoutFileName => `<Item>
+        <filename>dlc_${dlcName.toLowerCase()}:/common/ai/${vehicleLayoutFileName}</filename>
+        <fileType>VEHICLE_LAYOUTS_FILE</fileType>
+        <overlay value="false" />
+        <disabled value="true" />
+        <persistent value="false" />
+      </Item>`).join('\n        ')}
       </dataFiles>
       <contentChangeSets>
       <Item>
@@ -109,6 +118,9 @@ module.exports = {
 
             <!-- Translations -->
             ${hasTranslations ? `<Item>dlc_${dlcName.toLowerCase()}:/common/dlctext.meta</Item>` : ''}
+
+            <!-- Vehicle Layout Files -->
+            ${vehicleLayoutFileNames.map(vehicleLayoutFileName => `<Item>dlc_${dlcName.toLowerCase()}:/common/ai/${vehicleLayoutFileName}</Item>`).join('\n')}
         </filesToEnable>
         <txdToLoad />
         <txdToUnload />

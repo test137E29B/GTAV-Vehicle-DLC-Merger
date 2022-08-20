@@ -47,6 +47,8 @@ function createOutputFolder() {
   ensureDirSync(resolve(__dirname, '../output/x64/data/lang/americandlc.rpf'));
   logDebug('Creating output/common folder');
   ensureDirSync(resolve(__dirname, '../output/common'));
+  logDebug('Creating output/common/ai folder');
+  ensureDirSync(resolve(__dirname, '../output/common/ai'));
 }
 // This function cleans up the output, removing any useless folders like Audio if there is no audio files
 function cleanupOutputFolder() {
@@ -84,6 +86,13 @@ function cleanupOutputFolder() {
     logDebug('Deleting x64/data folder, there are no translations');
     rmSync(resolve(__dirname, '../output/x64/data'), { recursive: true, force: true });
   }
+
+  // If there is no vehiclelayouts files, remove the common/ai folder as it is not needed
+  const aiDirectory = resolve(__dirname, '../output/common/ai');
+  if (readdirSync(aiDirectory).length === 0) {
+    logDebug('Deleting common/ai folder, there are no vehiclelayouts');
+    rmSync(aiDirectory, { recursive: true, force: true });
+  }
 }
 
 (function () {
@@ -116,6 +125,7 @@ function cleanupOutputFolder() {
       txdRelationships: [], // Array of parsed vehicle txdRelationships
     };
     const oxtEntries = []; // Array of strings
+    const vehicleLayoutFileNames = []; // Array of strings
 
     let hasMods = false; // Were any vehicle mods detected
     let hasSfx = false; // Were any sfx audio files detected
@@ -175,6 +185,17 @@ function cleanupOutputFolder() {
           continue;
         }
 
+        if (['vehiclelayouts.meta', 'vehiclelayout.meta'].includes(fileName) || (
+          fileName.toLowerCase().endsWith('.meta') && fileName.toLowerCase().startsWith('vehiclelayout')
+        )) {
+          // Copy file over
+          const newFileName = `${mod}_${fileName}`;
+          vehicleLayoutFileNames.push(newFileName);
+          copyFileSync(resolve(modPath, fileName), resolve(__dirname, '../output/common/ai', newFileName));
+          logDebug(`Copied ${fileName} as ${newFileName} to output/common/ai`);
+          continue;
+        }
+
         if (fileName.endsWith('.oxt')) {
           processOxtFile(modPath, fileName, oxtEntries);
           continue;
@@ -227,8 +248,9 @@ function cleanupOutputFolder() {
     // Write out the setup2.xml file
     writeFileSync(resolve(__dirname, '../output/setup2.xml'), generateSetupFile(dlcName));
     // Write out the content.xml file
-    writeFileSync(resolve(__dirname, '../output/content.xml'), generateContentFile(dlcName, audioGameDataNames, audioSoundDataNames, hasMods, hasSfx, oxtEntries.length !== 0));
+    writeFileSync(resolve(__dirname, '../output/content.xml'), generateContentFile(dlcName, audioGameDataNames, audioSoundDataNames, hasMods, hasSfx, oxtEntries.length !== 0, vehicleLayoutFileNames));
 
+    // Write out the common/dlctext.meta file
     if (oxtEntries.length !== 0) {
       writeFileSync(resolve(__dirname, '../output/common/dlctext.meta'), formatXml(`<?xml version="1.0" encoding="UTF-8"?>
       <CExtraTextMetaFile>
@@ -237,7 +259,6 @@ function cleanupOutputFolder() {
         <isTitleUpdate value="false"/>
       </CExtraTextMetaFile>`, formatOptions));
     }
-
     // Write out the common/handling.meta file
     const handlingData = generateHandlingObject(handlingEntries);
     if (handlingData !== null) {
