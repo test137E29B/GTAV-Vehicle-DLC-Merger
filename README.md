@@ -52,6 +52,7 @@ If you wish to use this for another multiplayer mod (FiveM, AltV), it will outpu
 - Run `npm start`
 - Wait...
 - In the `output` folder will be the format and files needed to create the DLC pack in OpenIV.
+- There is only an `americandlc.rpf` language folder in the output. If you need other languages, you can copy the oxt file into those rpfs too.
 
 ## OpenIV
 
