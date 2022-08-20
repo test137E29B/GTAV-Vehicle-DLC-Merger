@@ -205,9 +205,11 @@ function cleanupOutputFolder() {
         if (fileName.endsWith('.rel')) {
           copyFileSync(resolve(modPath, fileName), resolve(__dirname, '../output/x64/audio', fileName));
           if (fileName.endsWith('.dat151.rel') || fileName.endsWith('_game.dat.rel')) {
-            audioGameDataNames.push(fileName.replace('.rel', ''));
+            // AUDIO_GAMEDATA
+            audioGameDataNames.push(fileName.replace('.rel', '').replace('.dat151', '.dat'));
           } else if (fileName.endsWith('.dat54.rel') || fileName.endsWith('_sounds.dat.rel')) {
-            audioSoundDataNames.push(fileName.replace('.rel', ''));
+            // AUDIO_SOUNDDATA
+            audioSoundDataNames.push(fileName.replace('.rel', '').replace('.dat54', '.dat'));
           } else {
             logError(`Unknown audio data file ${fileName}`);
           }
@@ -218,9 +220,7 @@ function cleanupOutputFolder() {
           fileName.endsWith('.dat151') ||
           fileName.endsWith('.dat54') ||
           fileName.endsWith('.dat151.nametable') ||
-          fileName.endsWith('.dat54.nametable') ||
-          fileName.endsWith('.dat151.rel.xml') ||
-          fileName.endsWith('.dat54.rel.xml')
+          fileName.endsWith('.dat54.nametable')
         ) {
           copyFileSync(resolve(modPath, fileName), resolve(__dirname, '../output/x64/audio', fileName));
           continue;

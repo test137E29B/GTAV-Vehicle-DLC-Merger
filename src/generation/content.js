@@ -10,14 +10,14 @@ module.exports = {
       <dataFiles>
         <!-- Audio Files -->
         ${audioGameDataNames.map(audioFileName => `<Item>
-          <filename>dlc_${dlcName.toLowerCase()}:/%PLATFORM%/audio/${audioFileName.replace('.dat151', '.dat')}</filename>
+          <filename>dlc_${dlcName.toLowerCase()}:/%PLATFORM%/audio/${audioFileName}</filename>
           <fileType>AUDIO_GAMEDATA</fileType>
           <overlay value="false"/>
           <disabled value="true"/>
           <persistent value="false"/>
         </Item>`).join('\n        ')}
         ${audioSoundDataNames.map(audioFileName => `<Item>
-          <filename>dlc_${dlcName.toLowerCase()}:/%PLATFORM%/audio/${audioFileName.replace('.dat54', '.dat')}</filename>
+          <filename>dlc_${dlcName.toLowerCase()}:/%PLATFORM%/audio/${audioFileName}</filename>
           <fileType>AUDIO_SOUNDDATA</fileType>
           <overlay value="false"/>
           <disabled value="true"/>
