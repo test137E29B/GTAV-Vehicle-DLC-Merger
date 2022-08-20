@@ -4,11 +4,15 @@ A small utility to merge Vehicle DLCs into a single RPF Structure.
 
 This utility does not create the RPF, but organises all the files in the output to be dragged almost immediately into an RPF created in OpenIV.
 
-If you wish to use this for another multiplayer mod, it will output in Single Player DLC format, so you would have to convert that output. There are probably better tools that already exist for those mods.
+If you wish to use this for another multiplayer mod (FiveM, AltV), it will output in Single Player DLC format, so you would have to convert that output. There are probably better tools that already exist for those mods.
 
 ## Future Support
 
-- vehiclelayouts.meta
+- Audio files
+
+## Known Issues
+
+- Audio files are correctly moved and added to the content and setup2 files, but they do not seem to work in game. If you know a fix or formatting issue, please open a GitHub Issue or Pull Request with a fix!
 
 ## Usage
 
@@ -23,6 +27,9 @@ If you wish to use this for another multiplayer mod, it will output in Single Pl
       > handling.meta
       > vehicles.meta
       > carvariations.meta
+      > {vehiclelayouts file}.meta
+      > ... add all other vehiclelayouts meta files here too - some dlcs have multiple!
+      > global.oxt (OXT Files are exported .gxt2 files from OpenIV!)
       > {audioFile}.dat151.rel
       > {audioFile}.dat54.rel
       > vehicles
@@ -37,7 +44,7 @@ If you wish to use this for another multiplayer mod, it will output in Single Pl
       > sfx (if the audio folder has any)
         > {sfxName}.awc
         > ... add all the audio/sfx files here
-
+    > ... add all your other dlcs in the same format, in their own folders!
   ```
 
   If you do not use this format, it will not work. If you do not have a specific file, like `handling.meta`, then you can ignore it
@@ -72,5 +79,3 @@ These have been asked, don't ask again please.
   Because it does not work correctly all the time, sometimes creating dlcs that are corrupted
 - > Why don't you use GTAUtil to unpack DLCs instead of requiring that format?
   Same reason as above, GTAUtil doesn't always work unfortunately. The little bit of manual labour is much better than the lots you'd otherwise have to do, right? :P
-- > Why does this not support language files included with some mods?
-  I created this while developing my RP server ([https://eternalrage.net/](EternalRage)) and I do not show these native ui pieces. I may add support for this in future, but feel free to open a pull request if you add support yourself!
